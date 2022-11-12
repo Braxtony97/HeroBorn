@@ -7,16 +7,25 @@ public class PlayerBehavior : MonoBehaviour
     public float moveSpeed = 10f;
     public float rotateSpeed = 75f;
 
+    public enum PlayerAction { Attack, Defend, Flee};
+    public PlayerAction action;
+
     public float jumpVelocity = 5f;
+
+    public float distanceToGround = 0.1f; //1 расстояние между CapsuleCollider игрока и любым объектом слоя Ground
+    public LayerMask groundLayer; //2 создаем переменную и используем для обнаружения коллайдера
+
 
     private float vInput;
     private float hInput;
-
     private Rigidbody _rb;
-    
+
+    private CapsuleCollider _col; //3 переменная для хранения CapsuleCollider игрока 
+
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _col = GetComponent<CapsuleCollider>(); //4 с помощью метода GetComponent() находим и получаем доступ к CapsuleCollider игрока
     }
 
     void Update()
@@ -28,7 +37,7 @@ public class PlayerBehavior : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (IsGrounded() && Input.GetKeyDown(KeyCode.Space)) // 5
         {
             _rb.AddForce(Vector3.up * jumpVelocity, ForceMode.Impulse);
         }
@@ -36,5 +45,13 @@ public class PlayerBehavior : MonoBehaviour
         Quaternion angleRot = Quaternion.Euler(rotation  * Time.fixedDeltaTime);
         _rb.MovePosition(this.transform.position + this.transform.forward * vInput * Time.fixedDeltaTime);
         _rb.MoveRotation(_rb.rotation * angleRot);
+    }
+
+    private bool IsGrounded() //6 
+    {
+        Vector3 capsuleBottom = new Vector3(_col.bounds.center.x, _col.bounds.min.y, _col.bounds.center.z); //7 
+        bool grounded = Physics.CheckCapsule(_col.bounds.center, capsuleBottom, distanceToGround, groundLayer, QueryTriggerInteraction.Ignore); //8
+        return grounded;//9
+
     }
 }
