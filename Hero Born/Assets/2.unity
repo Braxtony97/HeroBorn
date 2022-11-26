@@ -810,7 +810,7 @@ GameObject:
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -828,12 +828,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   rotateSpeed: 75
-  action: 0
   jumpVelocity: 5
   distanceToGround: 0.1
   groundLayer:
     serializedVersion: 2
     m_Bits: 512
+  bullet: {fileID: 1923806995332482652, guid: e71d7f37069331741a7eaec3ba76655c, type: 3}
+  bulletSpeed: 100
 --- !u!54 &1068842781
 Rigidbody:
   m_ObjectHideFlags: 0
