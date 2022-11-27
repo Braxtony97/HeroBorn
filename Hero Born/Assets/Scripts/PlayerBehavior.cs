@@ -11,7 +11,7 @@ public class PlayerBehavior : MonoBehaviour
     public LayerMask groundLayer; //2 создаем переменную и используем для обнаружения коллайдера
 
     public GameObject bullet;
-    public float bulletSpeed = 100f;
+    public float bulletSpeed = 10f;
 
     private float vInput;
     private float hInput;
