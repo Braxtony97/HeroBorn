@@ -30,13 +30,15 @@ public class PlayerBehavior : MonoBehaviour
         hInput = Input.GetAxis("Horizontal") * rotateSpeed;
         /*this.transform.Translate(Vector3.forward * vInput * Time.deltaTime);
         this.transform.Rotate(Vector3.up * hInput * Time.deltaTime);*/
+
+        if (IsGrounded() && Input.GetKeyDown(KeyCode.Space)) // 5 ï
+        {
+            _rb.AddForce(Vector3.up * jumpVelocity, ForceMode.Impulse);
+        }
     }
     void FixedUpdate()
     {
-        if (IsGrounded() && Input.GetKeyDown(KeyCode.Space)) // 5 ï
-            {
-                _rb.AddForce(Vector3.up * jumpVelocity, ForceMode.Impulse);
-            }
+        
         Vector3 rotation = Vector3.up * hInput;
         Quaternion angleRot = Quaternion.Euler(rotation  * Time.fixedDeltaTime);
         _rb.MovePosition(this.transform.position + this.transform.forward * vInput * Time.fixedDeltaTime);

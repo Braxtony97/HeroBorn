@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ItemBehavior : MonoBehaviour
 {
-        public GameBehavior gg;
+        public GameBehavior gg; //создали экземпл€р класса gameBehaviour, что бы иметь доступ к его переменной Items
 
         void Start()
         {
@@ -17,7 +17,7 @@ public class ItemBehavior : MonoBehaviour
             {
                 Destroy(this.transform.parent.gameObject);
                 Debug.Log("Item collected!");
-                gg.Items += 1;
+                gg.Items += 1; // вызываем Items и присваеваем ему значение
                 
             }
         }
