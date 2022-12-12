@@ -18,10 +18,13 @@ public class PlayerBehavior : MonoBehaviour
     private Rigidbody _rb;
     private CapsuleCollider _col; //3 переменна€ дл€ хранени€ CapsuleCollider игрока 
 
+    private GameBehavior _gameManager;
+
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _col = GetComponent<CapsuleCollider>(); //4 с помощью метода GetComponent() находим и получаем доступ к CapsuleCollider игрока
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameBehavior>();
     }
 
     void Update()
@@ -35,6 +38,13 @@ public class PlayerBehavior : MonoBehaviour
         {
             _rb.AddForce(Vector3.up * jumpVelocity, ForceMode.Impulse);
         }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            GameObject newBullet = Instantiate(bullet, this.transform.position + new Vector3(1, 0, 0), this.transform.rotation) as GameObject;
+            Rigidbody bulletRB = newBullet.GetComponent<Rigidbody>();
+            bulletRB.velocity = this.transform.forward * bulletSpeed;
+        }
     }
     void FixedUpdate()
     {
@@ -44,12 +54,7 @@ public class PlayerBehavior : MonoBehaviour
         _rb.MovePosition(this.transform.position + this.transform.forward * vInput * Time.fixedDeltaTime);
         _rb.MoveRotation(_rb.rotation * angleRot);
 
-        if (Input.GetMouseButtonDown(0))
-            {
-            GameObject newBullet = Instantiate(bullet, this.transform.position + new Vector3(1, 0, 0), this.transform.rotation) as GameObject;
-            Rigidbody bulletRB = newBullet.GetComponent<Rigidbody>();
-            bulletRB.velocity = this.transform.forward * bulletSpeed;
-            }
+        
     }
 
     private bool IsGrounded() //6 объ€вл€ем метод IsGrounded()
@@ -58,5 +63,13 @@ public class PlayerBehavior : MonoBehaviour
         bool grounded = Physics.CheckCapsule(_col.bounds.center, capsuleBottom, distanceToGround, groundLayer, QueryTriggerInteraction.Ignore); //8
         return grounded;//9
 
+    }
+
+    void OnCollisionEnter (Collision col1)
+    {
+        if (col1.gameObject.name == "Enemy")
+        {
+            _gameManager._HP -= 1;
+        }
     }
 }
