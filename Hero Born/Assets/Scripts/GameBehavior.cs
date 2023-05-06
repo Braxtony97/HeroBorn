@@ -5,13 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class GameBehavior : MonoBehaviour
 {
+    private string _state;
+    public string State
+    {
+        get { return _state;  }
+        set { _state = value; }
+    }
+    
     public string labelText = "Collect all 4 items and win your freedom!";
-    public int maxItems = 4;
+    public const int maxItems = 4;
 
     public bool showWinScreen = false;
+    public bool showLossScreen = false;
 
     private int _itemsCollected = 0;
-    private int _playerHP = 10;
+    private int _playerHP = 1;
 
     public int Items
     {
@@ -45,8 +53,29 @@ public class GameBehavior : MonoBehaviour
         set
         {
             _playerHP = value;
-            Debug.LogFormat("Lives: {0}", _playerHP);
+            
+            if (_playerHP <= 0)
+            {
+                labelText = "You want another life with that?";
+                showLossScreen = true;
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                labelText = "Ouch...that's got hurt.";
+            }
         }
+    }
+
+    void Start()
+    {
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        _state = "Manager initialized ..";
+        Debug.Log(_state);
     }
 
     void OnGUI()
@@ -59,12 +88,16 @@ public class GameBehavior : MonoBehaviour
             if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height/2 - 50, 300, 50), "YOU WIN!"))
             {
                 //Debug.Log("Push button!");
-                SceneManager.LoadScene(0);
-                Time.timeScale = 1.0f;
+                Utilities.RestartLevel(0);
+            }
+        }
+        if (showLossScreen)
+        {
+            if(GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 50, 200, 100), "You lose..."))
+            {
+                Utilities.RestartLevel();
             }
         }
         
-       
-
     }
 }                        
